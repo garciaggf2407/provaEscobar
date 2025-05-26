@@ -1,0 +1,110 @@
+.user-home-container {
+  text-align: center;
+  padding: 40px 20px;
+  color: #333;
+  background-color: #f5f5f5; /* Fundo cinza bem claro */
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.user-home-container h2 {
+  color: #111;
+  margin-bottom: 20px;
+  font-size: 2em; /* Tamanho de fonte ajustado */
+  font-weight: 700;
+}
+
+.user-home-container p {
+  font-size: 1em; /* Tamanho de fonte ajustado */
+  color: #555;
+  margin-bottom: 40px;
+}
+
+.product-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Remover estilos antigos não mais relevantes */
+.user-features-section,
+.user-features-section h3,
+.user-features-section ul,
+.user-features-section li {
+  /* Estes estilos não são mais usados */
+}
+
+/* Manter .user-home-container para o fundo e padding geral */
+
+.product-detail-section {
+  margin-top: 40px;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 40px auto;
+  text-align: left;
+  position: relative; /* Para posicionar o botão de fechar */
+}
+
+.product-detail-section h3 {
+  color: #111;
+  font-size: 2em;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.close-details-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.close-details-button:hover {
+  color: #111;
+}
+
+.detail-content {
+  display: flex;
+  gap: 30px; /* Espaço entre imagem e info */
+  flex-wrap: wrap; /* Quebra de linha em telas menores */
+  align-items: flex-start;
+}
+
+.detail-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  flex-shrink: 0; /* Não encolher a imagem */
+  max-height: 300px; /* Altura máxima para a imagem de detalhe */
+  object-fit: contain; /* Ajustar a imagem sem cortar */
+}
+
+.detail-info {
+  flex-grow: 1; /* Permitir que as informações cresçam */
+}
+
+.detail-info h4 {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #111;
+}
+
+.detail-info p {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.detail-info p strong {
+  color: #333;
+} 

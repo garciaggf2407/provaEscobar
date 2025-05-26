@@ -1,38 +1,183 @@
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif; /* Fonte limpa */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f5f5f5; /* Fundo cinza bem claro */
+  color: #333; /* Cor do texto padrão */
+  font-size: 16px; /* Tamanho de fonte base */
+  line-height: 1.5; /* Espaçamento entre linhas */
+}
+
 .App {
-  text-align: center;
+  display: flex; /* Usar flexbox no App para layout geral */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+/* Estilos para o cabeçalho/navbar vertical */
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  background-color: #2c3e50; /* Fundo escuro */
+  padding: 20px 0; /* Padding vertical */
+  border-right: 1px solid #1a252f; /* Borda sutil mais escura */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Itens em coluna */
+  align-items: center; /* Centralizar itens horizontalmente */
+  width: 240px; /* Aumentar largura para acomodar texto e ícones */
+  height: 100vh; /* Altura total da viewport */
+  position: fixed; /* Fixar na lateral */
+  top: 0;
+  left: 0; /* Fixar na esquerda */
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.3); /* Sombra mais proeminente */
+  box-sizing: border-box;
+  color: #ecf0f1; /* Cor do texto claro para fundo escuro */
+}
+
+.navbar-toggle {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 20px; /* Espaço abaixo do ícone de toggle */
+}
+
+.navbar-toggle i {
+  font-size: 1.8em; /* Tamanho do ícone de toggle */
+  color: #ecf0f1; /* Cor clara para o ícone */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar-toggle i:hover {
+  color: #bdc3c7; /* Cor mais clara no hover */
+}
+
+.navbar {
+  display: flex;
+  flex-direction: column; /* Itens da navbar em coluna */
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 100%; /* Ocupar largura total do header */
+  flex-grow: 1; /* Permitir que a navbar cresça e empurre os ícones para baixo */
 }
 
-.App-link {
-  color: #61dafb;
+.navbar-logo {
+  font-weight: bold;
+  font-size: 2em; /* Tamanho maior para o logo */
+  color: #ecf0f1; /* Cor clara para o logo */
+  margin-bottom: 40px; /* Aumentar espaço abaixo do logo */
+  margin-right: 0;
+  text-transform: uppercase;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar-nav {
+  display: flex;
+  flex-direction: column; /* Itens do menu em coluna */
+  list-style: none;
+  margin: 0;
+  padding: 0 15px; /* Padding horizontal menor */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.navbar-nav li {
+  margin-bottom: 10px; /* Espaço vertical entre itens do menu */
+  text-align: left; /* Alinhar texto dos links à esquerda */
+}
+
+.navbar-nav li:last-child {
+  margin-bottom: 0;
+}
+
+.navbar-nav a {
+  color: #bdc3c7; /* Cor dos links normais (cinza claro) */
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1em;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 12px 15px; /* Aumentar padding para área clicável e look preenchido */
+  display: flex; /* Usar flexbox para alinhar ícone e texto */
+  align-items: center;
+  border-radius: 4px;
+}
+
+.navbar-nav a i {
+  margin-right: 15px; /* Espaço entre ícone e texto */
+  font-size: 1.2em; /* Tamanho do ícone no link */
+}
+
+.navbar-nav a:hover {
+  color: #ecf0f1; /* Cor mais clara no hover */
+  background-color: #34495e; /* Fundo um pouco mais escuro no hover */
+}
+
+.navbar-nav a.active {
+  color: #ffffff; /* Cor branca para o link ativo */
+  background-color: #e74c3c; /* Cor de destaque (vermelho/rosa forte) */
+  font-weight: 600;
+  border-right: 5px solid #c0392b; /* Borda de destaque na direita */
+  padding-right: 10px; /* Ajustar padding para compensar a borda */
+}
+
+.navbar-icons {
+  display: flex;
+  flex-direction: column; /* Ícones em coluna */
+  align-items: center;
+  gap: 25px;
+  margin-top: auto;
+  padding-bottom: 30px;
+}
+
+.navbar-icons i {
+  font-size: 1.8em; /* Aumentar tamanho dos ícones inferiores */
+  color: #bdc3c7; /* Cor clara para os ícones */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.navbar-icons i:hover {
+  color: #ecf0f1; /* Cor mais clara no hover */
+}
+
+/* Espaço para o conteúdo ao lado da navbar fixa */
+.main-content {
+  margin-left: 240px; /* Ajustar margem para a nova largura da navbar */
+  padding: 30px; /* Aumentar padding para o conteúdo */
+  width: calc(100% - 240px); /* Ajustar largura para a nova largura da navbar */
+  box-sizing: border-box;
+}
+
+/* Estilos básicos para títulos */
+h1, h2, h3, h4, h5, h6 {
+  color: #111;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+/* Estilos básicos para links (fora da navbar) */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Estilos para mensagens de loading e erro */
+.loading,
+.error {
+  margin: 20px auto;
+  padding: 15px;
+  border-radius: 4px;
+  font-size: 1em;
+  text-align: center;
+  max-width: 500px;
+}
+
+.loading {
+  color: #111;
+  background-color: #e9ecef;
+}
+
+.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
 }
