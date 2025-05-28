@@ -13,6 +13,8 @@ import {
   Typography,
   Badge,
   useTheme,
+  Modal,
+  Button,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -28,7 +30,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
 import { styled } from '@mui/material/styles';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 const closedDrawerWidth = 56;
 
 const StyledDrawer = styled(Drawer)(({ theme, open }) => ({
@@ -114,6 +116,10 @@ function Layout() {
   const location = useLocation();
   const theme = useTheme();
 
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
+
+  console.log('Auth Info in Layout:', authInfo);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -124,7 +130,7 @@ function Layout() {
 
   const menuItems = [
     { text: 'Home', icon: <HomeIcon />, path: '/' },
-    ...(authInfo.role === 'admin' ? [{ text: 'Dashboard', icon: <DashboardIcon />, path: '/admin' }] : []),
+    ...(authInfo.token ? [{ text: 'Dashboard Admin', icon: <DashboardIcon />, path: '/admin' }] : []),
     { text: 'Carrinho', icon: <CartIcon />, path: '/cart' },
   ];
 
@@ -192,44 +198,106 @@ function Layout() {
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="toggle drawer"
-            onClick={open ? handleDrawerClose : handleDrawerOpen}
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
             edge="start"
             sx={{
               marginRight: 5,
+              ...(open && { display: 'none' }),
             }}
           >
-            {open ? <ChevronLeftIcon /> : <MenuIcon />}
+            <MenuIcon />
           </IconButton>
-          
+          {!open && (
+             <Logo variant="h6" onClick={() => navigate('/')} sx={{ flexGrow: 1 }}>
+               ML
+             </Logo>
+          )}
+
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <IconButton color="inherit" onClick={() => navigate('/cart')}>
-              <Badge badgeContent={cartItems.length} color="secondary">
-                <CartIcon />
-              </Badge>
-            </IconButton>
-            
-            <IconButton color="inherit">
-              <PersonIcon />
-            </IconButton>
-            
-            <IconButton color="inherit" onClick={logout}>
-              <LogoutIcon />
-            </IconButton>
-          </Box>
+          {authInfo.token && (
+             <Typography variant="body1" sx={{ mr: 2 }}>Olá, {authInfo.usuario || 'usuário'}</Typography>
+          )}
+
+          <IconButton color="inherit" onClick={() => !authInfo.token && navigate('/app/login')}>
+             <PersonIcon />
+          </IconButton>
+
+
+          <IconButton color="inherit" sx={{ ml: 2 }} onClick={() => navigate('/cart')}>
+            <Badge badgeContent={cartItems.length} color="error">
+              <CartIcon />
+            </Badge>
+          </IconButton>
+
+          {authInfo.token && (
+             <IconButton color="inherit" sx={{ ml: 2 }} onClick={() => setOpenLogoutModal(true)}>
+                <LogoutIcon />
+             </IconButton>
+          )}
         </Toolbar>
       </AppBar>
 
-      <StyledDrawer variant="permanent" open={open}>
-        {drawer}
+      {/* Drawer - Mini variant when closed */}
+      <StyledDrawer variant="permanent" open={open} anchor="left">
+         {drawer}
+         <Box sx={{ flexGrow: 1 }} /> {/* Empurra o ícone de fechar para o fundo */}
+         <List>
+           <ListItem button onClick={handleDrawerClose} sx={{
+              minHeight: 48,
+              justifyContent: open ? 'initial' : 'center',
+              px: 2.5,
+           }}>
+             <ListItemIcon
+               sx={{
+                 minWidth: 0,
+                 mr: open ? 3 : 'auto',
+                 justifyContent: 'center',
+               }}
+             >
+               {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+             </ListItemIcon>
+             {open && <ListItemText primary="Fechar Menu" sx={{ opacity: open ? 1 : 0 }} />}
+           </ListItem>
+         </List>
       </StyledDrawer>
 
       <Main open={open}>
-        <Toolbar />
-        <Outlet />
+        <Outlet /> {/* Renderiza o conteúdo da rota */}
       </Main>
+
+       {/* Modal de Confirmação de Logout */}
+       <Modal
+         open={openLogoutModal}
+         onClose={() => setOpenLogoutModal(false)}
+         aria-labelledby="logout-modal-title"
+         aria-describedby="logout-modal-description"
+       >
+         <Box sx={{
+           position: 'absolute',
+           top: '50%',
+           left: '50%',
+           transform: 'translate(-50%, -50%)',
+           width: 400,
+           bgcolor: 'background.paper',
+           boxShadow: 24,
+           p: 4,
+           textAlign: 'center',
+         }}>
+           <Typography id="logout-modal-title" variant="h6" component="h2">
+             Confirmar Logout
+           </Typography>
+           <Typography id="logout-modal-description" sx={{ mt: 2 }}>
+             Tem certeza que deseja sair?
+           </Typography>
+           <Box sx={{ mt: 3 }}>
+             <Button onClick={() => setOpenLogoutModal(false)} sx={{ mr: 2 }}>Cancelar</Button>
+             <Button onClick={() => { setOpenLogoutModal(false); logout(); }} variant="contained" color="error">Sair</Button>
+           </Box>
+         </Box>
+       </Modal>
+
     </Box>
   );
 }

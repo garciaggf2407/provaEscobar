@@ -14,6 +14,7 @@ import {
 import { styled } from '@mui/material/styles';
 import { motion } from 'framer-motion';
 import { useAuth } from '../../contexts/AuthContext';
+import api from '../../services/api';
 
 const StyledCard = styled(Card)`
   max-width: 400px;
@@ -39,8 +40,8 @@ const StyledForm = styled('form')`
 const MotionBox = motion(Box);
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [usuario, setUsuario] = useState('');
+  const [senha, setSenha] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -52,22 +53,25 @@ function Login() {
     setError(null);
 
     try {
-      // Simulação de autenticação
-      if (email === 'adm' && password === 'adm') {
-        const token = 'dummy-admin-token';
-        const role = 'admin';
-        login(token, role);
-        navigate('/admin');
-      } else if (email === 'usuario' && password === 'usuario') {
-        const token = 'dummy-user-token';
-        const role = 'user';
-        login(token, role);
+      console.log('Tentando fazer login com:', { usuario });
+      
+      const { data } = await api.post('/app/login', { 
+        usuario,
+        senha
+      });
+      
+      console.log('Resposta do servidor:', data);
+
+      if (data.token) {
+        login(data.token, 'user', usuario);
+        console.log('Login bem-sucedido:', { token: data.token, usuario });
         navigate('/');
       } else {
-        setError('Credenciais inválidas. Use "adm/adm" para administrador ou "usuario/usuario" para usuário normal.');
+        setError('Token não recebido do servidor');
       }
     } catch (err) {
-      setError('Ocorreu um erro ao fazer login. Tente novamente.');
+      console.error('Erro ao fazer login:', err);
+      setError(err.response?.data?.error || 'Erro ao conectar com o servidor. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -108,13 +112,14 @@ function Login() {
 
             <StyledForm onSubmit={handleSubmit}>
               <TextField
-                label="Email/Usuário"
+                label="Usuário (RA)"
                 variant="outlined"
                 fullWidth
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
                 required
                 disabled={loading}
+                placeholder="Digite seu RA"
               />
 
               <TextField
@@ -122,10 +127,11 @@ function Login() {
                 type="password"
                 variant="outlined"
                 fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 required
                 disabled={loading}
+                placeholder="Digite sua senha"
               />
 
               <Button
@@ -152,11 +158,17 @@ function Login() {
             </StyledForm>
 
             <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 2 }}>
-              Esqueceu sua senha?{' '}
-              <Button color="primary" sx={{ textTransform: 'none' }}>
-                Clique aqui
+              Não tem uma conta?{' '}
+              <Button color="primary" sx={{ textTransform: 'none' }} onClick={() => navigate('/register')}>
+                Registre-se
               </Button>
             </Typography>
+
+            <Box sx={{ mt: 2, textAlign: 'center' }}>
+              <Button variant="text" onClick={() => navigate('/')}>
+                Continuar como visitante
+              </Button>
+            </Box>
           </CardContent>
         </StyledCard>
       </MotionBox>

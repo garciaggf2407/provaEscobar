@@ -11,28 +11,33 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [authInfo, setAuthInfo] = useState({ token: null, role: null });
+  const [authInfo, setAuthInfo] = useState({ token: null, role: null, usuario: null });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     const storedRole = localStorage.getItem('userRole');
+    const storedUsuario = localStorage.getItem('usuario');
+    console.log('AuthContext: Loading from localStorage', { storedToken, storedRole, storedUsuario });
     if (storedToken) {
-      setAuthInfo({ token: storedToken, role: storedRole });
+      setAuthInfo({ token: storedToken, role: storedRole, usuario: storedUsuario });
     }
     setLoading(false);
   }, []);
 
-  const login = (token, role) => {
+  const login = (token, role, usuario) => {
     localStorage.setItem('token', token);
     localStorage.setItem('userRole', role);
-    setAuthInfo({ token, role });
+    localStorage.setItem('usuario', usuario);
+    console.log('AuthContext: Logging in', { token, role, usuario });
+    setAuthInfo({ token, role, usuario });
   };
 
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
-    setAuthInfo({ token: null, role: null });
+    localStorage.removeItem('usuario');
+    setAuthInfo({ token: null, role: null, usuario: null });
   };
 
   if (loading) {
